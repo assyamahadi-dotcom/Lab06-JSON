@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Records</title>
+</head>
+<body>
+
+<h2>Book Information</h2>
+
+<select id="bookSelect">
+    <option value="">Select a Book</option>
+</select>
+
+<div id="bookDetails"></div>
+
+<script>
+
+let books = [];
+
+fetch('https://raw.githubusercontent.com/assyamahadi-dotcom/Lab06-JSON/main/books.json')
+.then(response => response.json())
+.then(data => {
+
+    books = data.Books;
+
+    const select = document.getElementById('bookSelect');
+
+    books.forEach(book => {
+        let option = document.createElement('option');
+        option.value = book.title;
+        option.textContent = book.title;
+        select.appendChild(option);
+    });
+
+});
+
+document.getElementById('bookSelect').addEventListener('change', function() {
+
+    const selectedTitle = this.value;
+
+    const book = books.find(
+        b => b.title === selectedTitle
+    );
+
+    if (book) {
+        document.getElementById('bookDetails').innerHTML = `
+            <h3>${book.title}</h3>
+            <p><strong>Author:</strong> ${book.author}</p>
+            <p><strong>Publication Year:</strong> ${book.publicationYear}</p>
+            <p><strong>Genres:</strong> ${book.genres.join(", ")}</p>
+        `;
+    }
+
+});
+
+</script>
+
+</body>
+</html>
